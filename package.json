@@ -1,0 +1,14 @@
+{
+  "name": "note-app-server",
+  "version": "1.0.0",
+  "description": "Backend for Note App",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "@mui/icons-material": "^6.4.4",
+    "tailwindcss": "^4.0.6"
+  }
+}
