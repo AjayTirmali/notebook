@@ -1,18 +1,39 @@
 import axios from 'axios';
 
-// Using CORS Anywhere as a proxy to bypass CORS issues
-const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
+// Direct connection to backend
 const API_URL = 'https://notebookbackend-47rlt6s3m-ajay-tirmalis-projects.vercel.app';
 
 const api = axios.create({
-  baseURL: CORS_PROXY + API_URL,
+  baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
-    'X-Requested-With': 'XMLHttpRequest', // Required by CORS Anywhere
   },
 });
 
 export default api;
+
+// Add request/response interceptors for debugging
+api.interceptors.request.use(
+  config => {
+    console.log('API Request:', config);
+    return config;
+  },
+  error => {
+    console.error('API Request Error:', error);
+    return Promise.reject(error);
+  }
+);
+
+api.interceptors.response.use(
+  response => {
+    console.log('API Response:', response);
+    return response;
+  },
+  error => {
+    console.error('API Response Error:', error);
+    return Promise.reject(error);
+  }
+);
 
 export const fetchNotes = () => api.get('/api/notes');
 export const fetchNote = (id) => api.get(`/api/notes/${id}`);
