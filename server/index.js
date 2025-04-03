@@ -42,5 +42,23 @@ app.get('/api/test', (req, res) => {
   res.json({ message: 'API is working!' });
 });
 
+// Direct CORS test routes for debugging
+app.get('/api/cors-test', (req, res) => {
+  res.json({ 
+    message: 'CORS test successful!',
+    headers: req.headers,
+    origin: req.headers.origin || 'No origin header found'
+  });
+});
+
+app.post('/api/cors-test', (req, res) => {
+  res.json({ 
+    message: 'POST test successful!', 
+    body: req.body,
+    headers: req.headers,
+    method: req.method
+  });
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`)); 

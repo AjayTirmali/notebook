@@ -8,9 +8,9 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  // Increase timeout for slower responses
+  timeout: 10000,
 });
-
-export default api;
 
 // Add request/response interceptors for debugging
 api.interceptors.request.use(
@@ -30,13 +30,21 @@ api.interceptors.response.use(
     return response;
   },
   error => {
-    console.error('API Response Error:', error);
+    console.error('API Response Error:', error.response || error);
     return Promise.reject(error);
   }
 );
 
+// Simple test functions
+export const testAPI = () => api.get('/api/test');
+export const testCORS = () => api.get('/api/cors-test');
+export const testPost = (data) => api.post('/api/cors-test', data || { test: true });
+
+// Regular API functions
 export const fetchNotes = () => api.get('/api/notes');
 export const fetchNote = (id) => api.get(`/api/notes/${id}`);
 export const createNote = (note) => api.post('/api/notes', note);
 export const updateNote = (id, note) => api.put(`/api/notes/${id}`, note);
 export const deleteNote = (id) => api.delete(`/api/notes/${id}`);
+
+export default api;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchNotes, deleteNote } from '../api';
+import { fetchNotes, deleteNote, testAPI, testCORS, testPost } from '../api';
 import { 
   Grid, 
   Card, 
@@ -30,6 +30,7 @@ import { Link, useNavigate } from 'react-router-dom';
 function NoteList() {
   const [notes, setNotes] = useState([]);
   const [error, setError] = useState('');
+  const [testResult, setTestResult] = useState('');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [noteToDelete, setNoteToDelete] = useState(null);
   const navigate = useNavigate();
@@ -82,6 +83,40 @@ function NoteList() {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
+  // Test connection functions
+  const runApiTest = async () => {
+    setTestResult('Testing API...');
+    try {
+      const response = await testAPI();
+      setTestResult(`API Test Success: ${JSON.stringify(response.data)}`);
+    } catch (error) {
+      console.error(error);
+      setTestResult(`API Test Failed: ${error.message}`);
+    }
+  };
+
+  const runCorsTest = async () => {
+    setTestResult('Testing CORS...');
+    try {
+      const response = await testCORS();
+      setTestResult(`CORS Test Success: ${JSON.stringify(response.data)}`);
+    } catch (error) {
+      console.error(error);
+      setTestResult(`CORS Test Failed: ${error.message}`);
+    }
+  };
+
+  const runPostTest = async () => {
+    setTestResult('Testing POST...');
+    try {
+      const response = await testPost({ testData: 'From NoteList component' });
+      setTestResult(`POST Test Success: ${JSON.stringify(response.data)}`);
+    } catch (error) {
+      console.error(error);
+      setTestResult(`POST Test Failed: ${error.message}`);
+    }
+  };
+
   return (
     <Container>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
@@ -105,6 +140,24 @@ function NoteList() {
           {error}
         </Alert>
       )}
+
+      {/* Debug panel */}
+      <Box sx={{ mb: 3, p: 2, border: '1px dashed #ccc', borderRadius: 2 }}>
+        <Typography variant="h6">API Debug Panel</Typography>
+        <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+          <Button variant="outlined" size="small" onClick={runApiTest}>Test API</Button>
+          <Button variant="outlined" size="small" onClick={runCorsTest}>Test CORS</Button>
+          <Button variant="outlined" size="small" onClick={runPostTest}>Test POST</Button>
+          <Button variant="outlined" size="small" onClick={loadNotes}>Reload Notes</Button>
+        </Box>
+        {testResult && (
+          <Alert severity="info" sx={{ mt: 2, mb: 1, wordBreak: 'break-all' }}>
+            <Typography variant="body2" component="pre" sx={{ whiteSpace: 'pre-wrap' }}>
+              {testResult}
+            </Typography>
+          </Alert>
+        )}
+      </Box>
 
       {notes.length === 0 ? (
         <Box sx={{ 
