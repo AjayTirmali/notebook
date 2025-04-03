@@ -13,12 +13,8 @@ app.use(express.json());
 app.use((req, res, next) => {
   const origin = req.headers.origin;
   // Allow any subdomain of vercel.app that contains our project name
-  if (origin && (
-      origin === 'http://localhost:3000' ||
-      origin === 'https://notebook-ajay-tirmalis-projects.vercel.app' ||
-      origin.match(/https:\/\/notebook-.*-ajay-tirmalis-projects\.vercel\.app/)
-    )) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
+  if (origin) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -30,6 +26,11 @@ app.use((req, res, next) => {
   }
   
   next();
+});
+
+// Additional middleware specifically for OPTIONS requests
+app.options('*', (req, res) => {
+  res.status(200).end();
 });
 
 // Connect to MongoDB
