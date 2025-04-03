@@ -8,15 +8,29 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(cors({
-  origin: [
-    'https://notebook-mrhd83acc-ajay-tirmalis-projects.vercel.app',
-    'https://notebook-d1r1qttnk-ajay-tirmalis-projects.vercel.app',
-    'http://localhost:3000'
-  ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
-}));
+
+// Custom CORS middleware that's more flexible with Vercel deployments
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  // Allow any subdomain of vercel.app that contains our project name
+  if (origin && (
+      origin === 'http://localhost:3000' ||
+      origin === 'https://notebook-ajay-tirmalis-projects.vercel.app' ||
+      origin.match(/https:\/\/notebook-.*-ajay-tirmalis-projects\.vercel\.app/)
+    )) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  }
+
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+  
+  next();
+});
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
