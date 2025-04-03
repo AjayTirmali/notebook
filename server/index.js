@@ -9,7 +9,11 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors({
-  origin: ['https://notebook-mrhd83acc-ajay-tirmalis-projects.vercel.app', 'http://localhost:3000'],
+  origin: [
+    'https://notebook-mrhd83acc-ajay-tirmalis-projects.vercel.app',
+    'https://notebook-d1r1qttnk-ajay-tirmalis-projects.vercel.app',
+    'http://localhost:3000'
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
