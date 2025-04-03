@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchNotes, deleteNote, testAPI, testCORS, testPost } from '../api';
+import { fetchNotes, deleteNote, testAPI, testCORS, testPost, testOptions } from '../api';
 import { 
   Grid, 
   Card, 
@@ -117,6 +117,17 @@ function NoteList() {
     }
   };
 
+  const runOptionsTest = async () => {
+    setTestResult('Testing OPTIONS preflight...');
+    try {
+      const response = await testOptions();
+      setTestResult(`OPTIONS Test Result: ${JSON.stringify(response, null, 2)}`);
+    } catch (error) {
+      console.error(error);
+      setTestResult(`OPTIONS Test Failed: ${error.message}`);
+    }
+  };
+
   return (
     <Container>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
@@ -144,10 +155,11 @@ function NoteList() {
       {/* Debug panel */}
       <Box sx={{ mb: 3, p: 2, border: '1px dashed #ccc', borderRadius: 2 }}>
         <Typography variant="h6">API Debug Panel</Typography>
-        <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+        <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap' }}>
           <Button variant="outlined" size="small" onClick={runApiTest}>Test API</Button>
           <Button variant="outlined" size="small" onClick={runCorsTest}>Test CORS</Button>
           <Button variant="outlined" size="small" onClick={runPostTest}>Test POST</Button>
+          <Button variant="outlined" size="small" onClick={runOptionsTest}>Test OPTIONS</Button>
           <Button variant="outlined" size="small" onClick={loadNotes}>Reload Notes</Button>
         </Box>
         {testResult && (

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CORS Test Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    button {
+      padding: 8px 12px;
+      margin: 5px;
+      cursor: pointer;
+    }
+    #result {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #f5f5f5;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <h1>CORS API Test Page</h1>
+  <p>Use the buttons below to test API connectivity:</p>
+
+  <div>
+    <button onclick="testGet()">Test GET</button>
+    <button onclick="testPost()">Test POST</button>
+    <button onclick="testOptions()">Test OPTIONS</button>
+    <button onclick="testNotes()">Get Notes</button>
+    <button onclick="clearResult()">Clear Result</button>
+  </div>
+
+  <div id="result"></div>
+
+  <script>
+    const API_URL = 'https://notebookbackend-47rlt6s3m-ajay-tirmalis-projects.vercel.app';
+    const resultDiv = document.getElementById('result');
+
+    function displayResult(title, data) {
+      resultDiv.innerHTML = `<h3>${title}</h3>`;
+      
+      if (typeof data === 'object') {
+        resultDiv.innerHTML += JSON.stringify(data, null, 2);
+      } else {
+        resultDiv.innerHTML += data;
+      }
+    }
+
+    function clearResult() {
+      resultDiv.innerHTML = '';
+    }
+
+    // Test GET request
+    async function testGet() {
+      try {
+        const response = await fetch(`${API_URL}/api/cors-test`);
+        const data = await response.json();
+        displayResult('GET Success', data);
+      } catch (error) {
+        displayResult('GET Error', error.message);
+      }
+    }
+
+    // Test POST request
+    async function testPost() {
+      try {
+        const response = await fetch(`${API_URL}/api/cors-test`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ test: true })
+        });
+        const data = await response.json();
+        displayResult('POST Success', data);
+      } catch (error) {
+        displayResult('POST Error', error.message);
+      }
+    }
+
+    // Test OPTIONS request
+    async function testOptions() {
+      try {
+        const response = await fetch(`${API_URL}/api/cors-test`, {
+          method: 'OPTIONS',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+        
+        const headers = {};
+        response.headers.forEach((value, key) => {
+          headers[key] = value;
+        });
+        
+        displayResult('OPTIONS Success', {
+          status: response.status,
+          statusText: response.statusText,
+          headers: headers,
+          url: response.url
+        });
+      } catch (error) {
+        displayResult('OPTIONS Error', error.message);
+      }
+    }
+
+    // Test Notes API
+    async function testNotes() {
+      try {
+        const response = await fetch(`${API_URL}/api/notes`);
+        const data = await response.json();
+        displayResult('Notes Success', data);
+      } catch (error) {
+        displayResult('Notes Error', error.message);
+      }
+    }
+  </script>
+</body>
+</html> 

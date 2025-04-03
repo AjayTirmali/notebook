@@ -40,6 +40,31 @@ export const testAPI = () => api.get('/api/test');
 export const testCORS = () => api.get('/api/cors-test');
 export const testPost = (data) => api.post('/api/cors-test', data || { test: true });
 
+// Special test for OPTIONS preflight
+export const testOptions = () => {
+  // Manually create a fetch with OPTIONS method
+  return fetch(`${API_URL}/api/cors-test`, {
+    method: 'OPTIONS',
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  }).then(response => {
+    // Log all the response headers for diagnosis
+    const headers = {};
+    response.headers.forEach((value, key) => {
+      headers[key] = value;
+    });
+    
+    return {
+      status: response.status,
+      statusText: response.statusText,
+      headers: headers,
+      url: response.url,
+      ok: response.ok
+    };
+  });
+};
+
 // Regular API functions
 export const fetchNotes = () => api.get('/api/notes');
 export const fetchNote = (id) => api.get(`/api/notes/${id}`);
