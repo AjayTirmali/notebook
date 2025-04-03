@@ -1,9 +1,14 @@
 import axios from 'axios';
 
+// Using CORS Anywhere as a proxy to bypass CORS issues
+const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
+const API_URL = 'https://notebookbackend-47rlt6s3m-ajay-tirmalis-projects.vercel.app';
+
 const api = axios.create({
-  baseURL: 'https://notebookbackend-47rlt6s3m-ajay-tirmalis-projects.vercel.app',
+  baseURL: CORS_PROXY + API_URL,
   headers: {
     'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest', // Required by CORS Anywhere
   },
 });
 
