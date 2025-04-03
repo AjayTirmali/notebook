@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000',
+  baseURL: 'https://notebookbackend-47rlt6s3m-ajay-tirmalis-projects.vercel.app',
   headers: {
     'Content-Type': 'application/json',
   },
