@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchNotes, deleteNote, testAPI, testCORS, testPost, testOptions } from '../api';
+import { fetchNotes, deleteNote, testAPI, testCORS, testPost } from '../api';
 import { 
   Grid, 
   Card, 
@@ -120,8 +120,21 @@ function NoteList() {
   const runOptionsTest = async () => {
     setTestResult('Testing OPTIONS preflight...');
     try {
-      const response = await testOptions();
-      setTestResult(`OPTIONS Test Result: ${JSON.stringify(response, null, 2)}`);
+      // Manually test OPTIONS with fetch API since axios doesn't expose this directly
+      const response = await fetch('https://notebookbackend-47rlt6s3m-ajay-tirmalis-projects.vercel.app/api/cors-test', {
+        method: 'OPTIONS',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      // Convert headers to an object for display
+      const headers = {};
+      response.headers.forEach((value, key) => {
+        headers[key] = value;
+      });
+      
+      setTestResult(`OPTIONS Test Result:\nStatus: ${response.status}\nHeaders: ${JSON.stringify(headers, null, 2)}`);
     } catch (error) {
       console.error(error);
       setTestResult(`OPTIONS Test Failed: ${error.message}`);

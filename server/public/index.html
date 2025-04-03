@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Note App API</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1 {
+      color: #3f51b5;
+    }
+    .endpoint {
+      background-color: #f5f5f5;
+      padding: 10px;
+      margin: 15px 0;
+      border-left: 4px solid #3f51b5;
+    }
+    .method {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 3px;
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+      margin-right: 8px;
+    }
+    .get { background-color: #4CAF50; }
+    .post { background-color: #2196F3; }
+    .put { background-color: #FFC107; }
+    .delete { background-color: #F44336; }
+    a {
+      color: #3f51b5;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>Note App API</h1>
+  <p>Welcome to the Note App API. This is the backend server for the Note App application.</p>
+  
+  <h2>Endpoints</h2>
+  
+  <div class="endpoint">
+    <span class="method get">GET</span>
+    <strong>/api/notes</strong>
+    <p>Get all notes</p>
+  </div>
+  
+  <div class="endpoint">
+    <span class="method get">GET</span>
+    <strong>/api/notes/:id</strong>
+    <p>Get a single note by ID</p>
+  </div>
+  
+  <div class="endpoint">
+    <span class="method post">POST</span>
+    <strong>/api/notes</strong>
+    <p>Create a new note</p>
+  </div>
+  
+  <div class="endpoint">
+    <span class="method put">PUT</span>
+    <strong>/api/notes/:id</strong>
+    <p>Update a note</p>
+  </div>
+  
+  <div class="endpoint">
+    <span class="method delete">DELETE</span>
+    <strong>/api/notes/:id</strong>
+    <p>Delete a note</p>
+  </div>
+  
+  <h2>Test Endpoints</h2>
+  
+  <div class="endpoint">
+    <span class="method get">GET</span>
+    <strong>/api/test</strong>
+    <p>Simple API test endpoint</p>
+  </div>
+  
+  <div class="endpoint">
+    <span class="method get">GET</span>
+    <strong>/api/cors-test</strong>
+    <p>Test CORS configuration</p>
+  </div>
+  
+  <h2>Tools</h2>
+  <p><a href="/cors-test.html">CORS Test Tool</a> - Use this to test API connectivity</p>
+  
+  <hr>
+  <p>Backend API for the Note App &copy; 2023</p>
+</body>
+</html> 

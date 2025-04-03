@@ -11,25 +11,16 @@ const app = express();
 // Basic middlewares
 app.use(express.json());
 
-// Set CORS headers directly for every response
+// Basic CORS middleware
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Authorization');
-  res.setHeader('Access-Control-Max-Age', '86400');
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   
-  // Preflight request handling
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
   
-  next();
-});
-
-// For debugging purposes - log all incoming requests
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
-  console.log('Headers:', req.headers);
   next();
 });
 
@@ -38,39 +29,38 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log('MongoDB connection error:', err));
 
-// Use routes
-app.use('/api/notes', noteRoutes);
-
-// Simple test route
+// Simple test routes
 app.get('/api/test', (req, res) => {
-  res.json({ message: 'API is working!' });
+  res.json({ success: true, message: 'API is working!' });
 });
 
-// Direct CORS test routes for debugging
 app.get('/api/cors-test', (req, res) => {
   res.json({ 
+    success: true,
     message: 'CORS test successful!',
-    headers: req.headers,
-    origin: req.headers.origin || 'No origin header found'
+    origin: req.headers.origin || 'No origin header'
   });
 });
 
 app.post('/api/cors-test', (req, res) => {
   res.json({ 
-    message: 'POST test successful!', 
-    body: req.body,
-    headers: req.headers,
-    method: req.method
+    success: true,
+    message: 'POST test successful!',
+    data: req.body
   });
 });
 
-// Serve static files from the public directory
+// Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Add a route to access the CORS test HTML page
-app.get('/cors-test', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'cors-test.html'));
+// Routes
+app.use('/api/notes', noteRoutes);
+
+// Catch all route for client-side routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`)); 
